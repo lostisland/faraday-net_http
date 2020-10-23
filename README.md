@@ -24,7 +24,7 @@ Configure your Faraday connection to use this adapter like this:
 
 ```ruby
 connection = Faraday.new(url, conn_options) do |conn|
-  conn.adapter :net_http
+  conn.adapter(:net_http)
 end
 ```
 
