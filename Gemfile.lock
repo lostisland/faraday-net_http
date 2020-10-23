@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    faraday-net_http (0.0.1)
-      faraday (~> 1.0)
+    faraday-net_http (0.0.2)
 
 GEM
   remote: https://rubygems.org/
@@ -73,6 +72,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.0)
+  faraday (~> 1.0)
   faraday-net_http!
   multipart-parser (~> 0.1.1)
   rake (~> 13.0)
