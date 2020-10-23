@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Faraday adapter for Net::HTTP'
   spec.description = 'Faraday adapter for Net::HTTP'
-  spec.homepage = 'https://github.com/JanDintel/faraday-net_http'
+  spec.homepage = 'https://github.com/lostisland/faraday-net_http'
   spec.license = 'MIT'
 
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
@@ -18,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.metadata['allowed_push_host'] = 'TODO: Set to \'http://mygemserver.com\''
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/JanDintel/faraday-net_http'
-  spec.metadata['changelog_uri'] = 'https://github.com/JanDintel/faraday-net_http'
+  spec.metadata['source_code_uri'] = 'https://github.com/lostisland/faraday-net_http'
+  spec.metadata['changelog_uri'] = 'https://github.com/lostisland/faraday-net_http'
 
   spec.files = Dir.glob('lib/**/*') + %w[README.md LICENSE.md]
   spec.require_paths = ['lib']

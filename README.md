@@ -52,6 +52,6 @@ Everyone interacting in the Faraday Net::HTTP adapter project's codebases, issue
 [faraday-website]: https://lostisland.github.io/faraday
 [net-http]: https://ruby-doc.org/stdlib-2.7.0/libdoc/net/http/rdoc/Net/HTTP.html
 [rubygems]: https://rubygems.org
-[repo]: https://github.com/JanDintel/faraday-net_http
-[license]: https://github.com/JanDintel/faraday-net_http/blob/master/LICENSE.md
-[code-of-conduct]: https://github.com/JanDintel/faraday-net_http/blob/master/CODE_OF_CONDUCT.md
+[repo]: https://github.com/lostisland/faraday-net_http
+[license]: https://github.com/lostisland/faraday-net_http/blob/master/LICENSE.md
+[code-of-conduct]: https://github.com/lostisland/faraday-net_http/blob/master/CODE_OF_CONDUCT.md
