@@ -1,54 +1,55 @@
 require:
   - rubocop-packaging
+  - rubocop-performance
 
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.5
-
-Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Metrics/MethodLength:
-  Max: 30
-
-Layout/LineLength:
-  Max: 100
-
-Metrics/AbcSize:
-  Max: 28
+  TargetRubyVersion: 2.4
 
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
-    - faraday-http.gemspec
-
+    - examples/**/*.rb
+Metrics/ClassLength:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 67
+Metrics/ClassLength:
+  Max: 234
 Metrics/CyclomaticComplexity:
-  Max: 30
-
+  Max: 16
+Metrics/MethodLength:
+  Max: 48
 Metrics/PerceivedComplexity:
-  Max: 11
+  Max: 16
 
+Layout/EmptyLinesAroundAttributeAccessor: # (0.83)
+  Enabled: true
+Layout/LineLength:
+  Exclude:
+    - spec/**/*.rb
+    - examples/**/*.rb
 Layout/SpaceAroundMethodCallOperator:
   Enabled: true
-
+Lint/DeprecatedOpenSSLConstant: # (0.84)
+  Enabled: true
 Lint/RaiseException:
   Enabled: true
-
 Lint/StructNewOverride:
   Enabled: true
 
+Style/DoubleNegation:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
 Style/ExponentialNotation:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/SlicingWithRange: # (0.83)
   Enabled: true

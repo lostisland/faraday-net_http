@@ -9,10 +9,8 @@ rescue LoadError
 end
 require 'zlib'
 
-# rubocop:disable Metrics/ClassLength
 module Faraday
   class Adapter
-    # Net::HTTP adapter.
     class NetHttp < Faraday::Adapter
       exceptions = [
         IOError,
@@ -63,11 +61,13 @@ module Faraday
       def call(env)
         super
         http_response = connection(env) do |http|
-          perform_request(http, env)
-        rescue *NET_HTTP_EXCEPTIONS => e
-          raise Faraday::SSLError, e if defined?(OpenSSL) && e.is_a?(OpenSSL::SSL::SSLError)
+          begin
+            perform_request(http, env)
+          rescue *NET_HTTP_EXCEPTIONS => e
+            raise Faraday::SSLError, e if defined?(OpenSSL) && e.is_a?(OpenSSL::SSL::SSLError)
 
-          raise Faraday::ConnectionFailed, e
+            raise Faraday::ConnectionFailed, e
+          end
         end
 
         save_response(env, http_response.code.to_i,
@@ -153,7 +153,6 @@ module Faraday
         end
       end
 
-      # rubocop:disable Metrics/AbcSize
       def configure_ssl(http, ssl)
         return unless ssl
 
@@ -169,7 +168,6 @@ module Faraday
         http.min_version = ssl[:min_version] if ssl[:min_version]
         http.max_version = ssl[:max_version] if ssl[:max_version]
       end
-      # rubocop:enable Metrics/AbcSize
 
       def configure_request(http, req)
         if (sec = request_timeout(:read, req))
@@ -212,4 +210,3 @@ module Faraday
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
