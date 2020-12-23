@@ -11,8 +11,6 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
     - examples/**/*.rb
-Metrics/ClassLength:
-  Enabled: false
 Metrics/AbcSize:
   Max: 67
 Metrics/ClassLength:
