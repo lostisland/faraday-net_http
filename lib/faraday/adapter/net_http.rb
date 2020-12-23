@@ -48,14 +48,15 @@ module Faraday
       end
 
       def net_http_connection(env)
-        klass = if (proxy = env[:request][:proxy])
-                  Net::HTTP::Proxy(proxy[:uri].hostname, proxy[:uri].port,
-                                   proxy[:user], proxy[:password])
-                else
-                  Net::HTTP
-                end
+        proxy = env[:request][:proxy]
         port = env[:url].port || (env[:url].scheme == 'https' ? 443 : 80)
-        klass.new(env[:url].hostname, port)
+        if proxy
+          Net::HTTP.new(env[:url].hostname, port,
+                        proxy[:uri].hostname, proxy[:uri].port,
+                        proxy[:user], proxy[:password])
+        else
+          Net::HTTP.new(env[:url].hostname, port, nil)
+        end
       end
 
       def call(env)
