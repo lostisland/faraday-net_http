@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'faraday'
 require 'faraday/net_http'
 require 'faraday_specs_setup'
 
