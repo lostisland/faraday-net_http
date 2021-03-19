@@ -22,6 +22,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir.glob('lib/**/*') + %w[README.md LICENSE.md]
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'net-http', '~> 0.1'
+
   spec.add_development_dependency 'faraday', '~> 1.0'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
