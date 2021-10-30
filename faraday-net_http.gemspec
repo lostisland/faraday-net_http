@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'lib/faraday/net_http/version'
+lib = File.expand_path('lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'faraday/net_http/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'faraday-net_http'
