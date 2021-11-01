@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main, setup-ci]
+    branches: [main]
   schedule:
     - cron: '0 8 * * 1' # At 8:00 on Monday
 
@@ -21,11 +21,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
+          bundler-cache: true # 'bundle install' and cache
 
       - name: Rubocop
-        run: |
-          bin/setup
-          bin/ci-lint
+        run: bundle exec rubocop --format progress
 
   test:
     needs: [lint]
@@ -41,11 +40,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-
-      - name: Build
-        run: |
-          bin/setup
+          bundler-cache: true # 'bundle install' and cache
 
       - name: Test
-        run: |
-          bin/ci-test
+        run: bundle exec rspec
