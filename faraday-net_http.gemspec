@@ -25,16 +25,4 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'faraday', '~> 2.0.0.alpha-2'
-
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'simplecov', '~> 0.19.0'
-
-  spec.add_development_dependency 'multipart-parser', '~> 0.1.1'
-  spec.add_development_dependency 'webmock', '~> 3.4'
-
-  spec.add_development_dependency 'rubocop', '~> 0.91.1'
-  spec.add_development_dependency 'rubocop-packaging', '~> 0.5'
-  spec.add_development_dependency 'rubocop-performance', '~> 1.0'
 end
