@@ -62,17 +62,15 @@ module Faraday
       def call(env)
         super
         http_response = connection(env) do |http|
-          begin
-            perform_request(http, env)
-          rescue *NET_HTTP_EXCEPTIONS => e
-            raise Faraday::SSLError, e if defined?(OpenSSL) && e.is_a?(OpenSSL::SSL::SSLError)
+          perform_request(http, env)
+        rescue *NET_HTTP_EXCEPTIONS => e
+          raise Faraday::SSLError, e if defined?(OpenSSL) && e.is_a?(OpenSSL::SSL::SSLError)
 
-            raise Faraday::ConnectionFailed, e
-          end
+          raise Faraday::ConnectionFailed, e
         end
 
         save_response(env, http_response.code.to_i,
-                      http_response.body || +'', nil,
+                      encoded_body(http_response), nil,
                       http_response.message) do |response_headers|
           http_response.each_header do |key, value|
             response_headers[key] = value
@@ -207,6 +205,18 @@ module Faraday
                                  OpenSSL::SSL::VERIFY_NONE
                                end
                              end
+      end
+
+      def encoded_body(http_response)
+        body = http_response.body || +''
+        /\bcharset=\s*(.+?)\s*(;|$)/.match(http_response['Content-Type']) do |match|
+          content_charset = Encoding.find(match.captures.first)
+          body = body.dup if body.frozen?
+          body.force_encoding(content_charset)
+        rescue ArgumentError
+          nil
+        end
+        body
       end
     end
   end
