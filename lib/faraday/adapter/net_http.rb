@@ -72,7 +72,7 @@ module Faraday
         end
 
         save_response(env, http_response.code.to_i,
-                      http_response.body || +'', nil,
+                      encoded_body(http_response), nil,
                       http_response.message) do |response_headers|
           http_response.each_header do |key, value|
             response_headers[key] = value
@@ -207,6 +207,18 @@ module Faraday
                                  OpenSSL::SSL::VERIFY_NONE
                                end
                              end
+      end
+
+      def encoded_body(http_response)
+        body = http_response.body || +''
+        /\bcharset=\s*(.+?)\s*(;|$)/.match(http_response['Content-Type']) do
+          content_charset = Encoding.find($1)
+          body = body.dup if body.frozen?
+          body.force_encoding(content_charset)
+        rescue ArgumentError
+          nil
+        end
+        body
       end
     end
   end
