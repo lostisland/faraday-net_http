@@ -20,15 +20,17 @@ Or install it yourself as:
 
 ## Usage
 
-Configure your Faraday connection to use this adapter like this:
-
 ```ruby
-connection = Faraday.new(url, conn_options) do |conn|
-  conn.adapter(:net_http)
+conn = Faraday.new(...) do |f|
+  f.adapter :net_http do |http|
+    # yields Net::HTTP
+    http.idle_timeout = 100
+    http.verify_callback = lambda do |preverify, cert_store|
+      # do something here...
+    end
+  end
 end
 ```
-
-For more information on how to setup your Faraday connection and adapters usage, please refer to the [Faraday Website][faraday-website].
 
 ## Development
 
@@ -49,7 +51,6 @@ The gem is available as open source under the terms of the [license][license].
 Everyone interacting in the Faraday Net::HTTP adapter project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct][code-of-conduct].
 
 [faraday]: https://github.com/lostisland/faraday
-[faraday-website]: https://lostisland.github.io/faraday
 [net-http]: https://ruby-doc.org/stdlib-2.7.0/libdoc/net/http/rdoc/Net/HTTP.html
 [rubygems]: https://rubygems.org
 [repo]: https://github.com/lostisland/faraday-net_http
