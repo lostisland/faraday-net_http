@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
 require 'faraday/adapter/net_http'
 require 'faraday/net_http/version'
 
