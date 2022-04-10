@@ -85,37 +85,37 @@ RSpec.describe Faraday::Adapter::NetHttp do
     context 'when Content-Type charset is UTF-8' do
       let(:headers) { { 'Content-Type' => 'text/xml; charset=UTF-8' } }
 
-      it { expect(response.body.encoding).to eq(Encoding::UTF_8) }
+      it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
     end
 
     context 'when Content-Type charset is ISO-8859-1' do
       let(:headers) { { 'Content-Type' => 'text/html; charset=ISO-8859-1' } }
 
-      it { expect(response.body.encoding).to eq(Encoding::ISO_8859_1) }
+      it { expect(response.body.encoding).to eq(::Encoding::ISO_8859_1) }
     end
 
     context 'when Content-Type charset is Shift_JIS' do
       let(:headers) { { 'Content-Type' => 'text/html; charset=Shift_JIS' } }
 
-      it { expect(response.body.encoding).to eq(Encoding::Shift_JIS) }
+      it { expect(response.body.encoding).to eq(::Encoding::Shift_JIS) }
     end
 
     context 'when Content-Type is not given' do
       let(:headers) { {} }
 
-      it { expect(response.body.encoding).to eq(Encoding::ASCII_8BIT) }
+      it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
     end
 
     context 'when Content-Type charset is unknown' do
       let(:headers) { { 'Content-Type' => 'text/xml; charset=BLABLA-8BIT' } }
 
-      it { expect(response.body.encoding).to eq(Encoding::ASCII_8BIT) }
+      it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
     end
 
     context 'when Content-Type is empty' do
       let(:headers) { { 'Content-Type' => '' } }
 
-      it { expect(response.body.encoding).to eq(Encoding::ASCII_8BIT) }
+      it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
     end
   end
 end
