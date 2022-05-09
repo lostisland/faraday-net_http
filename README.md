@@ -24,7 +24,6 @@ Or install it yourself as:
 conn = Faraday.new(...) do |f|
   f.adapter :net_http do |http|
     # yields Net::HTTP
-    http.idle_timeout = 100
     http.verify_callback = lambda do |preverify, cert_store|
       # do something here...
     end
