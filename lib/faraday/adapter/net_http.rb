@@ -15,6 +15,7 @@ module Faraday
       exceptions = [
         IOError,
         Errno::EADDRNOTAVAIL,
+        Errno::EALREADY,
         Errno::ECONNABORTED,
         Errno::ECONNREFUSED,
         Errno::ECONNRESET,
