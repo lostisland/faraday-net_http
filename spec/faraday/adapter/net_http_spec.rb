@@ -56,13 +56,6 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
           expect(http.verify_hostname).to eq(true)
         end
-      else
-        it 'with verify_hostname options unsupported' do
-          adapter.send(:configure_ssl, http, ssl)
-
-          expect(http.verify_hostname).to eq(nil)
-        end
-
       end
     end
 
