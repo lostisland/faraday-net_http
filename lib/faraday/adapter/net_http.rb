@@ -167,6 +167,7 @@ module Faraday
         http.ssl_version = ssl[:version] if ssl[:version]
         http.min_version = ssl[:min_version] if ssl[:min_version]
         http.max_version = ssl[:max_version] if ssl[:max_version]
+        http.verify_hostname = ssl[:verify_hostname] if verify_hostname_enabled?(http, ssl)
       end
 
       def configure_request(http, req)
@@ -218,6 +219,10 @@ module Faraday
           nil
         end
         body
+      end
+
+      def verify_hostname_enabled?(http, ssl)
+        http.respond_to?(:verify_hostname=) && ssl.key?(:verify_hostname)
       end
     end
   end

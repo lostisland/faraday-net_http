@@ -42,8 +42,21 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
     context 'with https url' do
       let(:url) { URI('https://example.com') }
+      let(:ssl) do
+        Faraday::SSLOptions.new.tap do |ssl|
+          ssl.verify_hostname = true if ssl.respond_to?(:verify_hostname=)
+        end
+      end
 
       it { expect(http.port).to eq(443) }
+
+      if Gem::Version.new(Faraday::VERSION) > Gem::Version.new('2.3.0')
+        it 'supports verify_hostname option' do
+          adapter.send(:configure_ssl, http, ssl)
+
+          expect(http.verify_hostname).to eq(true)
+        end
+      end
     end
 
     context 'with http url including port' do
