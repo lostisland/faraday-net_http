@@ -50,7 +50,8 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
       it { expect(http.port).to eq(443) }
 
-      if Gem::Version.new(Faraday::VERSION) > Gem::Version.new('2.3.0')
+      if Gem::Version.new(Faraday::VERSION) > Gem::Version.new('2.3.0') &&
+         Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.0.0')
         it 'supports verify_hostname option' do
           adapter.send(:configure_ssl, http, ssl)
 
