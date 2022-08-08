@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/lostisland/faraday-net_http'
   spec.license = 'MIT'
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/lostisland/faraday-net_http'
@@ -24,5 +24,5 @@ Gem::Specification.new do |spec|
   spec.files = Dir.glob('lib/**/*') + %w[README.md LICENSE.md]
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'faraday', '>= 1.0'
+  spec.add_development_dependency 'faraday', '>= 2.5'
 end
