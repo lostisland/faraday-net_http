@@ -131,5 +131,11 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
       it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
     end
+
+    context 'when Content-Type charset is UTF-8 and space' do
+      let(:headers) { { 'Content-Type' => 'text/xml; charset= UTF-8 ' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
+    end
   end
 end
