@@ -106,18 +106,14 @@ module Faraday
         http_response
       end
 
-      def request_with_wrapped_block(http, env)
+      def request_with_wrapped_block(http, env, &block)
         # Must use Net::HTTP#start and pass it a block otherwise the server's
         # TCP socket does not close correctly.
         http.start do |opened_http|
           opened_http.request create_request(env) do |response|
             save_http_response(env, response)
 
-            if block_given?
-              response.read_body do |chunk|
-                yield(chunk)
-              end
-            end
+            response.read_body(&block) if block_given?
           end
         end
       end
@@ -172,20 +168,18 @@ module Faraday
       def ssl_cert_store(ssl)
         return ssl[:cert_store] if ssl[:cert_store]
 
-        @ssl_cert_store ||= begin
-                              # Use the default cert store by default, i.e. system ca certs
-                              OpenSSL::X509::Store.new.tap(&:set_default_paths)
-                            end
+        # Use the default cert store by default, i.e. system ca certs
+        @ssl_cert_store ||= OpenSSL::X509::Store.new.tap(&:set_default_paths)
       end
 
       def ssl_verify_mode(ssl)
         ssl[:verify_mode] || begin
-                               if ssl.fetch(:verify, true)
-                                 OpenSSL::SSL::VERIFY_PEER
-                               else
-                                 OpenSSL::SSL::VERIFY_NONE
-                               end
-                             end
+          if ssl.fetch(:verify, true)
+            OpenSSL::SSL::VERIFY_PEER
+          else
+            OpenSSL::SSL::VERIFY_NONE
+          end
+        end
       end
 
       def encoded_body(http_response)
