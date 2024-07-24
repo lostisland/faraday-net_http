@@ -3,7 +3,9 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 1-0-stable
   schedule:
     - cron: '0 8 * * 1' # At 8:00 on Monday
 
