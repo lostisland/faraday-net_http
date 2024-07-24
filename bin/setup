@@ -3,5 +3,5 @@ set -euo pipefail
 IFS=$'\n\t'
 set -vx
 
-gem install bundler
+gem install bundler -v 2.4.22 # The last version supporting Ruby 2.7
 bundle install
