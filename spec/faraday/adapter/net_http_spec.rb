@@ -12,9 +12,14 @@ RSpec.describe Faraday::Adapter::NetHttp do
   context 'checking http' do
     let(:url) { URI('http://example.com') }
     let(:adapter) { described_class.new }
-    let(:http) { adapter.send(:connection, url: url, request: {}) }
+    let(:ssl) { Faraday::SSLOptions.new }
+    let(:http) { adapter.send(:connection, url: url, request: {}, ssl: ssl) }
 
     it { expect(http.port).to eq(80) }
+
+    it { expect(http).not_to be_use_ssl }
+
+    it { expect(http.cert_store).to be_nil }
 
     it 'sets max_retries to 0' do
       adapter.send(:configure_request, http, {})
@@ -44,6 +49,10 @@ RSpec.describe Faraday::Adapter::NetHttp do
       let(:url) { URI('https://example.com') }
 
       it { expect(http.port).to eq(443) }
+
+      it { expect(http).to be_use_ssl }
+
+      it { expect(http.cert_store).not_to be_nil }
     end
 
     context 'with http url including port' do
