@@ -42,8 +42,9 @@ module Faraday
 
       def build_connection(env)
         net_http_connection(env).tap do |http|
-          http.use_ssl = env[:url].scheme == 'https' if http.respond_to?(:use_ssl=)
-          configure_ssl(http, env[:ssl])
+          if env[:url].scheme == 'https' && env[:ssl]
+            configure_ssl(http, env[:ssl])
+          end
           configure_request(http, env[:request])
         end
       end
@@ -129,7 +130,7 @@ module Faraday
       end
 
       def configure_ssl(http, ssl)
-        return unless ssl
+        http.use_ssl = true if http.respond_to?(:use_ssl=)
 
         http.verify_mode = ssl_verify_mode(ssl)
         http.cert_store = ssl_cert_store(ssl)
