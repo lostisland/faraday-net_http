@@ -133,7 +133,13 @@ module Faraday
         http.verify_mode = ssl_verify_mode(ssl)
         http.cert_store = ssl_cert_store(ssl)
 
-        http.cert = ssl[:client_cert] if ssl[:client_cert]
+        if ssl.client_cert.is_a?(Array)
+          http.cert = ssl.client_cert.first
+          http.extra_chain_cert = ssl.client_cert[1..]
+        else
+          http.cert = ssl.client_cert
+        end
+
         http.key = ssl[:client_key] if ssl[:client_key]
         http.ca_file = ssl[:ca_file] if ssl[:ca_file]
         http.ca_path = ssl[:ca_path] if ssl[:ca_path]
