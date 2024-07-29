@@ -175,7 +175,7 @@ RSpec.describe Faraday::Adapter::NetHttp do
       it 'sets the cert as cert' do
         adapter.send(:configure_ssl, http, ssl_options)
         expect(http.cert).to eq(cert)
-        expect(http.extra_chain_cert).to be_empty
+        expect(http.extra_chain_cert).to be_nil
       end
     end
   end
