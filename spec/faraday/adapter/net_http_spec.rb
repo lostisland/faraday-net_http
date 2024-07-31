@@ -159,24 +159,36 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
     context 'when client_cert is provided as an array' do
       let(:cert_array) { [OpenSSL::X509::Certificate.new, OpenSSL::X509::Certificate.new] }
-      let(:ssl_options) { Faraday::SSLOptions.new(client_cert: cert_array) }
+      let(:ssl_options) do
+        Faraday::SSLOptions.new.tap do |ssl_options|
+          ssl_options.client_cert = cert_array
+        end
+      end
 
       it 'sets the first cert as cert and the rest as extra_chain_cert' do
         adapter.send(:configure_ssl, http, ssl_options)
-        expect(http.cert).to eq(cert_array.first)
-        expect(http.extra_chain_cert).to eq(cert_array[1..])
       end
+
+      it { expect(http.cert).to eq(cert_array.first) }
+
+      it { expect(http.extra_chain_cert).to eq(cert_array[1..]) }
     end
 
     context 'when client_cert is provided as a single cert' do
       let(:cert) { OpenSSL::X509::Certificate.new }
-      let(:ssl_options) { Faraday::SSLOptions.new(client_cert: cert) }
+      let(:ssl_options) do
+        Faraday::SSLOptions.new.tap do |ssl_options|
+          ssl_options.client_cert = cert
+        end
+      end
 
       it 'sets the cert as cert' do
         adapter.send(:configure_ssl, http, ssl_options)
-        expect(http.cert).to eq(cert)
-        expect(http.extra_chain_cert).to be_empty
       end
+
+      it { expect(http.cert).to eq(cert) }
+
+      it { expect(http.extra_chain_cert).to be_nil }
     end
   end
 end
