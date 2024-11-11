@@ -53,7 +53,8 @@ module Faraday
         if proxy
           Net::HTTP.new(env[:url].hostname, port,
                         proxy[:uri].hostname, proxy[:uri].port,
-                        proxy[:user], proxy[:password])
+                        proxy[:user], proxy[:password],
+                        proxy[:uri].scheme == 'https')
         else
           Net::HTTP.new(env[:url].hostname, port, nil)
         end
