@@ -191,4 +191,52 @@ RSpec.describe Faraday::Adapter::NetHttp do
       it { expect(http.extra_chain_cert).to be_nil }
     end
   end
+
+  context 'http proxy' do
+    let(:adapter) { described_class.new }
+    let(:url) { URI('https://example.com') }
+    let(:proxy) { URI('http://proxy.example.com') }
+    let(:proxy_options) do
+      {
+        uri: proxy,
+        user: 'proxy_user',
+        password: 'proxy_pass'
+      }
+    end
+    let(:http) { adapter.send(:connection, url: url, request: { proxy: proxy_options }) }
+
+    it { expect(http.proxy_address).to eq 'proxy.example.com' }
+
+    it { expect(http.proxy_port).to be 80 }
+
+    it { expect(http.proxy_user).to eq 'proxy_user' }
+
+    it { expect(http.proxy_pass).to eq 'proxy_pass' }
+
+    it { expect(http.instance_variable_get(:@proxy_use_ssl)).to be false }
+  end
+
+  context 'https proxy' do
+    let(:adapter) { described_class.new }
+    let(:url) { URI('https://example.com') }
+    let(:proxy) { URI('https://proxy.example.com') }
+    let(:proxy_options) do
+      {
+        uri: proxy,
+        user: 'proxy_user',
+        password: 'proxy_pass'
+      }
+    end
+    let(:http) { adapter.send(:connection, url: url, request: { proxy: proxy_options }) }
+
+    it { expect(http.proxy_address).to eq 'proxy.example.com' }
+
+    it { expect(http.proxy_port).to be 443 }
+
+    it { expect(http.proxy_user).to eq 'proxy_user' }
+
+    it { expect(http.proxy_pass).to eq 'proxy_pass' }
+
+    it { expect(http.instance_variable_get(:@proxy_use_ssl)).to be true }
+  end
 end
