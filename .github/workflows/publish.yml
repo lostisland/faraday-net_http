@@ -16,7 +16,8 @@ jobs:
 
       - name: Set up latest Ruby
         uses: ruby/setup-ruby@v1
-        bundler-cache: true
+        with:
+          bundler-cache: true
 
       - name: Publish to RubyGems
         uses: rubygems/release-gem@v1
