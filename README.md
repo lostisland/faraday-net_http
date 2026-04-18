@@ -54,4 +54,4 @@ Everyone interacting in the Faraday Net::HTTP adapter project's codebases, issue
 [rubygems]: https://rubygems.org
 [repo]: https://github.com/lostisland/faraday-net_http
 [license]: https://github.com/lostisland/faraday-net_http/blob/main/LICENSE.md
-[code-of-conduct]: https://github.com/lostisland/faraday-net_http/blob/main/CODE_OF_CONDUCT.md
+[code-of-conduct]: https://github.com/pathum2583-eng/faraday-net_http/blob/main/CODE_OF_CONDUCT.md
