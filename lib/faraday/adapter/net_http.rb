@@ -187,11 +187,10 @@ module Faraday
       end
 
       def encoded_body(http_response)
-        body = http_response.body || +''
+        body = http_response.body || ''
         /\bcharset=([^;]+)/.match(http_response['Content-Type']) do |match|
           content_charset = ::Encoding.find(match[1].strip)
-          body = body.dup if body.frozen?
-          body.force_encoding(content_charset)
+          body = body.dup.force_encoding(content_charset)
         rescue ArgumentError
           nil
         end
