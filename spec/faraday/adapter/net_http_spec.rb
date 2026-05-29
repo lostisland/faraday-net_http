@@ -148,6 +148,19 @@ RSpec.describe Faraday::Adapter::NetHttp do
     end
   end
 
+  context 'when the response has no body and no Content-Type' do
+    let(:adapter) { described_class.new }
+    let(:http_response) do
+      instance_double(Net::HTTPResponse, body: nil).tap do |response|
+        allow(response).to receive(:[]).with('Content-Type').and_return(nil)
+      end
+    end
+
+    it 'returns a mutable (non-frozen) body' do
+      expect(adapter.send(:encoded_body, http_response)).not_to be_frozen
+    end
+  end
+
   context 'client certificate' do
     let(:adapter) { described_class.new }
     let(:url) { URI('https://example.com') }
