@@ -35,7 +35,7 @@ end
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](rubygems).
+To release a new version, update the version number in `version.rb`, then commit and push that to `main` branch. Then, use GitHub Releases to create a matching Release. A GitHub Action will publish the gem to Rubygems.org.
 
 ## Contributing
 
