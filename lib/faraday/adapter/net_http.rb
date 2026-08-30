@@ -37,6 +37,7 @@ module Faraday
 
       def initialize(app = nil, opts = {}, &block)
         @ssl_cert_store = nil
+        @ssl_cert_store_mutex = Mutex.new
         super(app, opts, &block)
       end
 
@@ -173,7 +174,9 @@ module Faraday
         return ssl[:cert_store] if ssl[:cert_store]
 
         # Use the default cert store by default, i.e. system ca certs
-        @ssl_cert_store ||= OpenSSL::X509::Store.new.tap(&:set_default_paths)
+        @ssl_cert_store ||= @ssl_cert_store_mutex.synchronize do
+          @ssl_cert_store ||= OpenSSL::X509::Store.new.tap(&:set_default_paths)
+        end
       end
 
       def ssl_verify_mode(ssl)
