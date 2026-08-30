@@ -28,7 +28,8 @@ module Faraday
         Net::ProtocolError,
         SocketError,
         Zlib::GzipFile::Error,
-        Zlib::DataError
+        Zlib::DataError,
+        Zlib::NeedDict
       ]
 
       exceptions << ::OpenSSL::SSL::SSLError if defined?(::OpenSSL::SSL::SSLError)
