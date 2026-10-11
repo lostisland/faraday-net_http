@@ -31,6 +31,25 @@ conn = Faraday.new(...) do |f|
 end
 ```
 
+### Restricting trusted certificate authorities
+
+By default, `ca_file` and `ca_path` add certificate authorities to the system
+trust store. They do not restrict trust to only the supplied authorities.
+To restrict trust, provide an explicit certificate store. An empty store lets
+you trust only the authorities supplied through `ca_file` or `ca_path`:
+
+```ruby
+require 'openssl'
+
+conn = Faraday.new('https://example.com', ssl: {
+  ca_file: '/path/to/trusted-ca.pem',
+  cert_store: OpenSSL::X509::Store.new
+})
+```
+
+Certificate and hostname verification remain enabled. Alternatively, populate
+the explicit store yourself with `add_file` or `add_cert` and omit `ca_file`.
+
 ### SOCKS proxy
 
 A `socks://` proxy is supported when the optional [socksify][socksify] gem (`~> 1.8`) is installed. It is not a dependency of this gem, so add it to your Gemfile:
