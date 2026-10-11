@@ -50,6 +50,20 @@ conn = Faraday.new('https://example.com', ssl: {
 Certificate and hostname verification remain enabled. Alternatively, populate
 the explicit store yourself with `add_file` or `add_cert` and omit `ca_file`.
 
+### SOCKS proxy
+
+A `socks://` proxy is supported when the optional [socksify][socksify] gem (`~> 1.8`) is installed. It is not a dependency of this gem, so add it to your Gemfile:
+
+```ruby
+gem 'socksify', '~> 1.8'
+```
+
+```ruby
+conn = Faraday.new(url, proxy: 'socks://user:password@127.0.0.1:1080')
+```
+
+Using a `socks://` proxy without socksify raises a `RuntimeError`.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -70,6 +84,7 @@ Everyone interacting in the Faraday Net::HTTP adapter project's codebases, issue
 
 [faraday]: https://github.com/lostisland/faraday
 [net-http]: https://ruby-doc.org/stdlib-2.7.0/libdoc/net/http/rdoc/Net/HTTP.html
+[socksify]: https://github.com/astro/socksify-ruby
 [rubygems]: https://rubygems.org
 [repo]: https://github.com/lostisland/faraday-net_http
 [license]: https://github.com/lostisland/faraday-net_http/blob/main/LICENSE.md

@@ -7,6 +7,13 @@ rescue LoadError
     'Make sure openssl is installed if you want ssl support'
   require 'net/http'
 end
+
+begin
+  require 'socksify/http'
+rescue LoadError
+  # socksify is optional and only required when using a SOCKS proxy
+end
+
 require 'zlib'
 
 module Faraday
@@ -32,6 +39,7 @@ module Faraday
 
       exceptions << ::OpenSSL::SSL::SSLError if defined?(::OpenSSL::SSL::SSLError)
       exceptions << ::Net::OpenTimeout if defined?(::Net::OpenTimeout)
+      exceptions << ::SOCKSError if defined?(::SOCKSError)
 
       NET_HTTP_EXCEPTIONS = exceptions.freeze
 
@@ -50,7 +58,9 @@ module Faraday
       def net_http_connection(env)
         proxy = env[:request][:proxy]
         port = env[:url].port || (env[:url].scheme == 'https' ? 443 : 80)
-        if proxy
+        if socks_proxy?(proxy)
+          socks_proxy_class(proxy).new(env[:url].hostname, port, nil)
+        elsif proxy
           Net::HTTP.new(env[:url].hostname, port,
                         proxy[:uri].hostname, proxy[:uri].port,
                         proxy[:user], proxy[:password],
@@ -126,6 +136,20 @@ module Faraday
             response_headers[key] = value
           end
         end
+      end
+
+      def socks_proxy?(proxy)
+        proxy && proxy[:uri].scheme == 'socks'
+      end
+
+      def socks_proxy_class(proxy)
+        raise 'SOCKS proxy support requires the socksify gem ~> 1.8' unless Net::HTTP.respond_to?(:socks_proxy)
+
+        # socksify stores its settings on a class shared by every
+        # Net::HTTP.socks_proxy call, so use a subclass to keep proxies isolated.
+        Class.new(Net::HTTP).socks_proxy(proxy[:uri].hostname, proxy[:uri].port,
+                                         username: proxy[:user],
+                                         password: proxy[:password])
       end
 
       def configure_ssl(http, ssl)
