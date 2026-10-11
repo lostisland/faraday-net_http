@@ -146,6 +146,42 @@ RSpec.describe Faraday::Adapter::NetHttp do
 
       it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
     end
+
+    context 'when Content-Type charset is quoted' do
+      let(:headers) { { 'Content-Type' => 'text/xml; charset="ISO-8859-1"' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::ISO_8859_1) }
+    end
+
+    context 'when Content-Type charset is quoted and followed by another parameter' do
+      let(:headers) { { 'Content-Type' => 'text/xml; charset="UTF-8"; boundary=x' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
+    end
+
+    context 'when Content-Type charset parameter name is uppercase' do
+      let(:headers) { { 'Content-Type' => 'text/xml; CHARSET=UTF-8' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
+    end
+
+    context 'when Content-Type charset has no space after the semicolon' do
+      let(:headers) { { 'Content-Type' => 'text/xml;charset=UTF-8' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::UTF_8) }
+    end
+
+    context 'when Content-Type has a parameter merely ending in charset' do
+      let(:headers) { { 'Content-Type' => 'text/xml; x-charset=UTF-8' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
+    end
+
+    context 'when Content-Type charset is an unterminated quoted value' do
+      let(:headers) { { 'Content-Type' => 'text/xml; charset="UTF-8' } }
+
+      it { expect(response.body.encoding).to eq(::Encoding::ASCII_8BIT) }
+    end
   end
 
   context 'when the response has no body and no Content-Type' do
