@@ -21,6 +21,7 @@ jobs:
       - name: Set up latest Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: ruby
           bundler-cache: true # 'bundle install' and cache
 
       - name: Rubocop
