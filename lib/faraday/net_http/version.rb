@@ -2,6 +2,6 @@
 
 module Faraday
   module NetHttp
-    VERSION = '3.4.4'
+    VERSION = '3.5.0'
   end
 end
