@@ -8,6 +8,7 @@ gem 'faraday', github: 'lostisland/faraday'
 gem 'rake', '~> 13.0'
 gem 'rspec', '~> 3.0'
 gem 'simplecov'
+gem 'socksify', '~> 1.8'
 
 gem 'webmock', '~> 3.4'
 
