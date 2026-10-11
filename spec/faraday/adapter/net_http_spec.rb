@@ -184,6 +184,22 @@ RSpec.describe Faraday::Adapter::NetHttp do
     end
   end
 
+  context 'when the response body cannot be decompressed' do
+    let(:connection) do
+      Faraday.new('http://example.com') { |conn| conn.adapter :net_http }
+    end
+
+    [Zlib::DataError, Zlib::NeedDict, Zlib::BufError].each do |error_class|
+      it "wraps #{error_class} in Faraday::ConnectionFailed" do
+        stub_request(:get, 'http://example.com').to_raise(error_class.new('bad data'))
+
+        expect { connection.get }.to raise_error(Faraday::ConnectionFailed, 'bad data') do |error|
+          expect(error.cause).to be_a(error_class)
+        end
+      end
+    end
+  end
+
   context 'when the response has no body and no Content-Type' do
     let(:adapter) { described_class.new }
     let(:http_response) do
