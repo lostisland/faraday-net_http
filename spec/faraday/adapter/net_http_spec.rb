@@ -256,19 +256,67 @@ RSpec.describe Faraday::Adapter::NetHttp do
     it { expect(http.address.to_s).to eq 'example.com' }
 
     it 'does not share settings between proxies' do
-      other = adapter.send(:connection,
-                           url: url,
-                           request: { proxy: { uri: URI('socks://other.example.com:1081') } })
+      first = http
+      second = adapter.send(:connection,
+                            url: url,
+                            request: { proxy: { uri: URI('socks://other.example.com:1081') } })
 
-      expect(other.class.socks_server).to eq 'other.example.com'
-      expect(http.class.socks_server).to eq 'proxy.example.com'
-      expect(http.class.socks_username).to eq 'proxy_user'
+      expect(first.class).not_to eq(second.class)
+      expect(first.class.socks_server).to eq 'proxy.example.com'
+      expect(first.class.socks_username).to eq 'proxy_user'
+      expect(second.class.socks_server).to eq 'other.example.com'
+      expect(second.class.socks_username).to be_nil
     end
 
     it 'does not alter plain Net::HTTP' do
       http
 
       expect(Net::HTTP).not_to be_respond_to(:socks_server)
+    end
+
+    context 'when the SOCKS server rejects the connection' do
+      let(:server) { TCPServer.new('127.0.0.1', 0) }
+      let(:proxy_url) { "socks://127.0.0.1:#{server.addr[1]}" }
+      let(:connection) do
+        Faraday.new('http://localhost', proxy: proxy_url) { |conn| conn.adapter :net_http }
+      end
+
+      after { server.close }
+
+      def serve_socks
+        Thread.new do
+          client = server.accept
+          yield client
+        ensure
+          client&.close
+        end
+      end
+
+      it 'raises Faraday::ConnectionFailed on a rejected destination' do
+        serve_socks do |client|
+          client.read(3) # version, method count, one method
+          client.write([5, 0].pack('C2'))
+          client.read(4 + 1 + 'localhost'.bytesize + 2)
+          client.write([5, 5, 0, 1, 0, 0, 0, 0, 0, 0].pack('C10')) # connection refused
+        end
+
+        expect { connection.get }.to raise_error(Faraday::ConnectionFailed, /refused/i)
+      end
+
+      context 'with credentials' do
+        let(:proxy_url) { "socks://user:pass@127.0.0.1:#{server.addr[1]}" }
+
+        it 'raises Faraday::ConnectionFailed on an authentication failure' do
+          serve_socks do |client|
+            client.read(3) # version, method count, one method
+            client.write([5, 2].pack('C2'))
+            client.read(3 + 'user'.bytesize + 'pass'.bytesize)
+            client.write([1, 1].pack('C2')) # authentication failed
+          end
+
+          expect { connection.get }.to raise_error(Faraday::ConnectionFailed, /authentication failed/i)
+        end
+      end
     end
 
     context 'when socksify is not loaded' do

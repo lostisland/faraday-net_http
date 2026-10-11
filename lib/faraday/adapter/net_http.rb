@@ -39,6 +39,7 @@ module Faraday
 
       exceptions << ::OpenSSL::SSL::SSLError if defined?(::OpenSSL::SSL::SSLError)
       exceptions << ::Net::OpenTimeout if defined?(::Net::OpenTimeout)
+      exceptions << ::SOCKSError if defined?(::SOCKSError)
 
       NET_HTTP_EXCEPTIONS = exceptions.freeze
 
